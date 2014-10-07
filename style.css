@@ -1,0 +1,84 @@
+/*
+Theme Name:    My Shoestrap 3
+Description:   My custom child theme for Shoestrap 3
+Version:       draft
+Author:        Your Name
+Template:      shoestrap-3
+*/
+
+/* shoestrap reset: begin */
+.wrap.main-section .content .bg {
+    padding-top:0;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    text-decoration:underline;
+}
+
+.nav-list .nav-sublist > li > a {
+    border-left:0;
+    background-color:transparent;
+}
+
+.before-main-wrapper {
+    position:relative;
+    z-index: 100;
+}
+
+.nav-list {
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
+    border-color: transparent;
+    overflow:visible;
+}
+
+.nav-list > li {
+    float:left;
+    border-bottom: 0;
+    border-color: transparent;
+}
+
+.nav-list > li > a:hover {
+    background-color:#f2f2f2;
+    color:#666;
+}
+
+li.parent .nav-sublist {
+    position:absolute;
+}
+
+.nav-list > li.parent:hover .nav-sublist {
+    display:block;
+}
+
+/* shoestrap reset: end */
+
+#infscr-loading {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    opatity:0.7;
+    background:#fff;
+    text-align:center;
+    padding:5px;
+}
+
+.no-padding {
+    padding:0;
+}
+
+.fullwidth-image.absolute {
+    position:absolute;
+    width:100%;
+    left:0;
+    z-index:1;
+}
+
+.content-part {
+    position:relative;
+    z-index: 2;
+}
+
+
+
