@@ -5,10 +5,14 @@ require('includes/shoestrap-overrides.php');
 require('includes/parallax.php');
 require('includes/shoestrap-options-navbar.php');
 require('includes/shoestrap-options-header.php');
+require('includes/shoestrap-options-footer.php');
 require('includes/menu-anchor-links.php');
 require('includes/cpt-override.php');
 require('includes/cpt-options-section.php');
 require('includes/cpt-images-section.php');
+
+require('includes/widget-logo.php');
+
 //require( 'includes/acf-values-slider.php');
 
 //require( 'wptuts-editor-buttons/wptuts.php' );
@@ -65,4 +69,10 @@ function theme_less_styles( $bootstrap ) {
     return $bootstrap . '
     @import "' . get_stylesheet_directory() . '/assets/less/xl-size.less";';
 
+}
+
+add_action( 'widgets_init', 'register_site_widgets' );
+
+function register_site_widgets () {
+    register_widget('LogoWidget');
 }

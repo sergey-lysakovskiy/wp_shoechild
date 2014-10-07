@@ -11,6 +11,21 @@ Template:      shoestrap-3
     padding-top:0;
 }
 
+.header-wrapper {
+    position:relative;
+}
+
+.header-wrapper:after {
+    clear:both;
+    content:'';
+    display: block;
+    height:0;
+}
+
+.header-wrapper .brand-logo {
+    float:left;
+}
+
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
     text-decoration:underline;
 }
