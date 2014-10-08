@@ -50,6 +50,7 @@ while ( have_posts() ) : the_post();
                                     $height = get_sub_field('height') ? 'height:'.get_sub_field('height') . 'px' : '';
                                 ?>
                                 <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part text-block <?php echo $san_title ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>" style="<?php echo $height; ?>">
+                                    <div class="layout-wrapper">
                                     <?php if($opts['is_title']): ?>
                                     <header>
                                         <h3 class="content-part-title"><?php echo $title ?></h3>
@@ -60,16 +61,17 @@ while ( have_posts() ) : the_post();
                                         <?php echo $content ?>
                                     </div>
                                     <?php endif; ?>
+                                    </div>
                                 </section>
                                 <?php
                                 break;
-                                case 'fullwidth_image':
+                                case 'image_block':
                                     $image = get_sub_field('image');
                                     $height = get_sub_field('height');
                                     $window_effect = get_sub_field('window_effect');
-                                    $overlay_enable = get_sub_field('overlay_enable');
+                                    $overlay = get_sub_field('overlay');
                                 ?>
-                                <section class="content-part fullwidth-image <?php if($overlay_enable): ?>absolute<?php endif; ?>" style="background-image: url('<?php echo $image['url'] ?>'); height:<?php echo $height ?>px; background-size: cover; <?php if($window_effect): ?>background-attachment: fixed<?php endif; ?>;"></section>
+                                <section class="content-part fullwidth-image <?php if($overlay): ?>absolute<?php endif; ?>" style="background-image: url('<?php echo $image['url'] ?>'); height:<?php echo $height ?>px; background-size: cover; <?php if($window_effect): ?>background-attachment: fixed<?php endif; ?>;"></section>
                                 <?php
                                 break;
                                 case 'entries_block':

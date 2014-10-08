@@ -1,3 +1,7 @@
+body {
+    background-image:url(../i/transparent.jpg);
+}
+
 .dropcap {
     float: left;
     font-size: 80px;

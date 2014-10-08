@@ -13,6 +13,7 @@ Template:      shoestrap-3
 
 .header-wrapper {
     position:relative;
+    padding:0;
 }
 
 .header-wrapper:after {
@@ -93,6 +94,11 @@ li.parent .nav-sublist {
 .content-part {
     position:relative;
     z-index: 2;
+}
+
+.cell {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 

@@ -12,6 +12,7 @@ require('includes/cpt-options-section.php');
 require('includes/cpt-images-section.php');
 
 require('includes/widget-logo.php');
+require('includes/widget-phone.php');
 
 //require( 'includes/acf-values-slider.php');
 
@@ -40,6 +41,9 @@ function shoestrap_styles() {
 
     wp_register_script('theme',get_stylesheet_directory_uri() . '/assets/js/theme.js',array('jquery','isotope'));
     wp_enqueue_script('theme');
+
+    wp_register_style('user',get_stylesheet_directory_uri() . '/userdata/css/user.css',array('shoestrap_css'));
+    wp_enqueue_style('user');
 
     wp_enqueue_style( 'theme', get_stylesheet_uri(), false, null );
 }
@@ -75,4 +79,17 @@ add_action( 'widgets_init', 'register_site_widgets' );
 
 function register_site_widgets () {
     register_widget('LogoWidget');
+    register_widget('PhoneWidget');
+}
+
+add_filter( 'admin_init' , 'phone_register_fields' );
+
+function phone_register_fields() {
+    register_setting( 'general', 'sitephone', 'esc_attr' );
+    add_settings_field('sitephone', '<label for="sitephone">'.__('Phone' , 'phone' ).'</label>' , 'phone_fields_html' , 'general' );
+}
+
+function phone_fields_html() {
+    $value = get_option( 'sitephone', '' );
+    echo '<input type="text" id="sitephone" name="sitephone" value="' . $value . '" />';
 }
