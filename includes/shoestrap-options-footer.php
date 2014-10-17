@@ -51,14 +51,15 @@ function footer_extra_styles() {
         $color_1 = $ss_settings['footer_background']; 
         $color_2 = $ss_settings['footer_bg_color_2']; 
         
-        $custom_css .= "footer.content-info { background: {$color_1}; /* Old browsers */
-            background: -moz-linear-gradient(top,  {$color_1} 0%, {$color_2} 100%); /* FF3.6+ */
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,{$color_1}), color-stop(100%,{$color_2})); /* Chrome,Safari4+ */
-            background: -webkit-linear-gradient(top,  {$color_1} 0%,{$color_2} 100%); /* Chrome10+,Safari5.1+ */
-            background: -o-linear-gradient(top,  {$color_1} 0%,{$color_2} 100%); /* Opera 11.10+ */
-            background: -ms-linear-gradient(top,  {$color_1} 0%,{$color_2} 100%); /* IE10+ */
-            background: linear-gradient(to bottom,  {$color_1} 0%,{$color_2} 100%); /* W3C */
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='{$color_1}', endColorstr='{$color_2}',GradientType=0 ); /* IE6-9 */
+        $custom_css .= "footer.content-info { 
+            background: #023994; /* Old browsers */
+            background: -moz-linear-gradient(-45deg,  #023994 0%, #00113b 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#023994), color-stop(100%,#00113b)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(-45deg,  #023994 0%,#00113b 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(-45deg,  #023994 0%,#00113b 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(-45deg,  #023994 0%,#00113b 100%); /* IE10+ */
+            background: linear-gradient(135deg,  #023994 0%,#00113b 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#023994', endColorstr='#00113b',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
         }";
        
         

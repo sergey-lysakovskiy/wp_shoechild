@@ -6,4 +6,11 @@ jQuery(document).ready(function($){
         itemSelector: 'article',
         layoutMode: 'fitRows'
     });*/    
+    
+    $('a[data-toggle=tab]').click(function(){
+        console.log($(this).parents('.nav-tabs'));
+       $(this).parents('.nav-tabs').removeClass('li-1');
+       $(this).parents('.nav-tabs').removeClass('li-2');
+       $(this).parents('.nav-tabs').addClass('li-'+$(this).parent().index());
+    })
 })

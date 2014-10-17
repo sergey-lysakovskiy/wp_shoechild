@@ -34,6 +34,6 @@ function wptuts_add_buttons( $plugin_array ) {
     return $plugin_array;
 }
 function wptuts_register_buttons( $buttons ) {
-    array_push( $buttons, 'alert','alert_2' ); // dropcap', 'recentposts
+    array_push( $buttons, 'alert','button' ); // dropcap', 'recentposts
     return $buttons;
 }

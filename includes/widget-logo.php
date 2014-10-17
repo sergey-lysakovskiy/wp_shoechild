@@ -11,7 +11,7 @@ class LogoWidget extends WP_Widget {
             
             $logo = $ss_settings['logo'];
             ?>
-            <a href="<?php echo site_url() ?>"><img src="<?php echo $logo['url'] ?>" width="<?php echo $logo['width'] ?>" height="<?php echo $logo['height'] ?>"></a>
+<div class="site-logo"><a href="<?php echo site_url() ?>"><img src="<?php echo $logo['url'] ?>" width="<?php echo $logo['width'] ?>" height="<?php echo $logo['height'] ?>"></a></div>
             <?php                
 	}
 

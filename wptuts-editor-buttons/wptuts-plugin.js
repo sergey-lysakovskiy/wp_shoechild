@@ -21,11 +21,11 @@
                 image : url + '/recent.jpg'
             });*/
             
-            ed.addButton('alert_2',{
+            /*ed.addButton('alert_2',{
                 title : 'Alert',
                 cmd : 'alert_2',
                 icon: 'icon dashicons-info',
-            });
+            });*/
 
             /*ed.addCommand('dropcap', function() {
                 var selected_text = ed.selection.getContent();
@@ -49,7 +49,7 @@
                 }
             });*/
             
-            ed.addCommand('alert_2',function(){
+            /*ed.addCommand('alert_2',function(){
                 ed.windowManager.open( {
                     title: 'Alert properties',
                     body: [{
@@ -79,8 +79,9 @@
                 });
                 
                 
-            });
+            });*/
             
+            // alert : begin
             var alert_types = ['success','info','warning','danger'];
             
             ed.addButton("alert", {
@@ -110,12 +111,10 @@
                                     self.active(state);
                                 });
                             }
-                        })
+                        });
                     } else {
-                        ed.formatter.remove('alert-success');
-                        ed.formatter.remove('alert-info');
-                        ed.formatter.remove('alert-warning');
-                        ed.formatter.remove('alert-danger');
+                        for(var i=0;i<alert_types.length;i++)
+                            ed.formatter.remove('alert-'+alert_types[i]);
                     }                  
                 },
                 onpostrender: function() {
@@ -130,28 +129,68 @@
                     }
                 }
             });
+            // alert : end
+            
+            
+            // button : begin
+            var btn_types = ['default','primary','success','info','warning','danger'];
+
+            ed.addButton("button", {
+                title: 'Button',
+                tooltip: "Make selection as button",
+                icon: 'glyphicon glyphicon-heart',
+                onclick: function() {
+                    var self = this;
+                    if(!self.active()) {
+                        ed.windowManager.open( {
+                            title: 'Button properties',
+                            body: [{
+                                type: 'listbox',
+                                name: 'button_type',
+                                label: 'Button type',
+                                values: [
+                                    {text : 'Default', value : 'btn-default'},  
+                                    {text : 'Primary', value : 'btn-primary'},  
+                                    {text : 'Success', value : 'btn-success'},  
+                                    {text : 'Info', value : 'btn-info'},  
+                                    {text : 'Warning', value : 'btn-warning'},  
+                                    {text : 'Danger', value : 'btn-danger'},  
+                                ] 
+                            }],
+                            onsubmit: function( e ) {
+                                ed.formatter.toggle(e.data.alert_type);
+                                
+                                ed.formatter.formatChanged(e.data.alert_type, function(state) {
+                                    self.active(state);
+                                });
+                            }
+                        });
+                    } else {
+                        for(var i=0;i<btn_types.length;i++)
+                            ed.formatter.remove('btn-'+btn_types[i]);
+                    }                  
+                },
+                onpostrender: function() {
+                    var self = this;
+
+                    if(ed.formatter) {
+                        editorFormatterSetup(self);
+                    } else {
+                        ed.on('init', function() {
+                            editorFormatterSetup(self);
+                        });
+                    }
+                }
+            });
+            // button : end
             
             var editorFormatterSetup = function(self) {
-                
-                ed.formatter.register('alert-success', {
-                    block: 'div',
-                    classes: 'alert alert-success'
-                });
 
-                ed.formatter.register('alert-info', {
-                    block: 'div',
-                    classes: 'alert alert-info'
-                });
-
-                ed.formatter.register('alert-warning', {
-                    block: 'div',
-                    classes: 'alert alert-warning'
-                });
-
-                ed.formatter.register('alert-danger', {
-                    block: 'div',
-                    classes: 'alert alert-danger'
-                });
+                for(var i=0;i<alert_types.length;i++)
+                    ed.formatter.register('alert-'+alert_types[i], {
+                        block: 'div',
+                        classes: 'alert alert-'+alert_types[i]
+                    });
                 
                 ed.formatter.register('alert', {
                     block: 'div',
@@ -161,7 +200,25 @@
                 ed.formatter.formatChanged('alert', function(state) {
                     self.active(state);
                 },true);                
+                
+                for(var i=0;i<btn_types.length;i++)
+                    ed.formatter.register('btn-'+alert_types[i], {
+                        block: 'button',
+                        classes: 'btn btn-'+alert_types[i]
+                    });
+                
+                ed.formatter.register('btn', {
+                    block: 'a',
+                    classes: 'btn',
+                    role: 'button'
+                });                
+
+                ed.formatter.formatChanged('btn', function(state) {
+                    self.active(state);
+                },true);                
+                
             };
+            
         },
  
         /**

@@ -14,7 +14,7 @@ jQuery(document).ready(function($){
     }, { offset: -navbar_height });    
     
     
-    $('a[href*=#]:not([href=#])').click(function(e) {
+    $('a[href*=#]:not([href=#]:not([data-toggle=tab])').click(function(e) {
         e.preventDefault();
         jumpToAnchor(this);
     });

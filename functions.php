@@ -14,8 +14,6 @@ require('includes/cpt-images-section.php');
 require('includes/widget-logo.php');
 require('includes/widget-phone.php');
 
-//require( 'includes/acf-values-slider.php');
-
 //require( 'wptuts-editor-buttons/wptuts.php' );
 
 add_action('wp_enqueue_scripts', 'shoestrap_styles');
@@ -39,13 +37,16 @@ function shoestrap_styles() {
     wp_register_script('anchors-jump',get_stylesheet_directory_uri() . '/assets/js/anchors-jump.js',array('jquery','waypoints'));
     wp_enqueue_script('anchors-jump');
 
+    wp_register_script('wc-quantity-loop',get_stylesheet_directory_uri() . '/assets/js/wc-quantity-loop.js',array('jquery'));
+    wp_enqueue_script('wc-quantity-loop');
+
     wp_register_script('theme',get_stylesheet_directory_uri() . '/assets/js/theme.js',array('jquery','isotope'));
     wp_enqueue_script('theme');
 
-    wp_register_style('user',get_stylesheet_directory_uri() . '/userdata/css/user.css',array('shoestrap_css'));
-    wp_enqueue_style('user');
-
     wp_enqueue_style( 'theme', get_stylesheet_uri(), false, null );
+
+    wp_register_style('user',get_stylesheet_directory_uri() . '/userdata/css/user.css',array('shoestrap_css','theme'));
+    wp_enqueue_style('user');
 }
 
 add_action( 'admin_enqueue_scripts', 'load_admin_scripts' );

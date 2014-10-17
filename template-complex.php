@@ -43,13 +43,16 @@ while ( have_posts() ) : the_post();
                             $title = get_sub_field('title');
                             $san_title = ($title) ? sanitize_title($title) : 'content-part-'.$index;
                             $opts = get_sub_field('options');
+                            if(is_array($opts)) {
+                                $opts = array_shift($opts);
+                            }
                             
                             switch ($layout):
                                 case 'text_block':
                                     $content = get_sub_field('content');
                                     $height = get_sub_field('height') ? 'height:'.get_sub_field('height') . 'px' : '';
                                 ?>
-                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part text-block <?php echo $san_title ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>" style="<?php echo $height; ?>">
+                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part text-block <?php echo $san_title ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?> <?php echo $opts['css_class'] ?>" style="<?php echo $height; ?>">
                                     <div class="layout-wrapper">
                                     <?php if($opts['is_title']): ?>
                                     <header>
@@ -147,11 +150,65 @@ while ( have_posts() ) : the_post();
                                     // Restore original Post Data
                                     wp_reset_postdata();
                                 break;
+                                case 'tabs':
+                                    $items = get_sub_field('items');
+                                ?>
+                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part entries-block post-type-<?php echo $post_type ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>">
+                                    <div class="layout-wrapper">
+                                    <?php if($opts['is_title']): ?>
+                                    <header>
+                                        <h3 class="content-part-title"><?php echo $title ?></h3>
+                                    </header>
+                                    <?php endif; ?>
+                                    
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <?php foreach ($items as $i => $item): ?>
+                                        <li <?php if ($i==0):?>class="active"<?php endif; ?>><a href="#<?php echo sanitize_title($item['title']) ?>" class="hexa" role="tab" data-toggle="tab"><img src="<?php echo $item['image']['url'] ?>"><span class="title"><?php echo $item['title'] ?></span></a></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <?php foreach ($items as $i => $item): ?>
+                                        <div class="tab-pane fade <?php if ($i==0):?>in active<?php endif; ?>" id="<?php echo sanitize_title($item['title']) ?>"><?php echo $item['description'] ?></div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    </div>
+                                </section>
+                                <?php
+                               
+                                break;
+                                case 'woocommerce_products':
+                                    $args = array(
+                                        'post_type' => 'product',
+                                        'posts_per_page' => 12
+                                        );
+                                    $loop = new WP_Query( $args );
+                                    if ( $loop->have_posts() ):                                    
+                                ?>
+                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part entries-block post-type-<?php echo $post_type ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>">
+                                    <?php if($opts['is_title']): ?>
+                                    <header>
+                                        <h3 class="content-part-title"><?php echo $title ?></h3>
+                                    </header>
+                                    <?php endif; ?>
+                                    <div class="entries-wrapper post-type-products row">
+                                        <?php
+                                            while ( $loop->have_posts() ) : $loop->the_post();
+                                                    woocommerce_get_template_part( 'templates/content', 'product' );
+                                            endwhile;
+                                        ?>
+                                    </div>
+                                </section>  
+                                <?php
+                                    endif;
+                                    wp_reset_postdata();                                
+                                break;
                                 case 'features_block':
                                     $columns_num = array_shift(get_sub_field('columns_num'));
                                     $items = get_sub_field('items');
-                                    $numbered = get_sub_field('numbered');
-                                    $column_padding = get_sub_field('column_padding');
+                                    $numbered = $opts['numbered'];
+                                    $column_padding = $opts['column_padding'];
                                     
                                     $custom_css = '';
                                     
@@ -166,20 +223,6 @@ while ( have_posts() ) : the_post();
                                     
                                 ?>
                                 <style type="text/css"><?php echo $custom_css ?></style>
-                                <script type="text/javascript">
-                                    var slider = new MasterSlider();
-                                    slider.setup('masterslider' , {
-                                            width:800,    // slider standard width
-                                            height:350,   // slider standard height
-                                            space:5,
-                                            fullwidth:true,
-                                            autoHeight:true,
-                                            view:"mask"
-                                            // more slider options goes here...
-                                        });
-                                    // adds Arrows navigation control to the slider.
-                                    slider.control('arrows');
-                                </script>
                                 <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part entries-block post-type-<?php echo $post_type ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>">
                                     <?php if($opts['is_title']): ?>
                                     <header>
