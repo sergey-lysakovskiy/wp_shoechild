@@ -3,7 +3,7 @@
 Template Name: Complex page
 */
 
-global $ss_framework, $ss_settings;
+global $ss_framework, $ss_settings, $wp_config;
 
 while ( have_posts() ) : the_post();
         if(get_field('show_title'))
@@ -25,7 +25,7 @@ while ( have_posts() ) : the_post();
                 else
                     $columns_scheme = explode('_',get_sub_field('columns_scheme_'.$columns_count));
 ?>
-<div class="row-fluid <?php if($anchor): ?>waypoint-block<?php endif; ?>" <?php if($anchor): ?>id="<?php echo sanitize_title($anchor_name) ?>"<?php endif; ?>>
+<div class="row-fluid <?php if($anchor): ?>waypoint-block<?php endif; ?> <?php if($columns_count>1): ?>max-width-wrapper<?php endif; ?>" <?php if($anchor): ?>id="<?php echo sanitize_title($anchor_name) ?>"<?php endif; ?>>
 <?php
                 $end_of_blocks = false;
                 $layout_count = count(get_sub_field('layout'));
@@ -40,117 +40,98 @@ while ( have_posts() ) : the_post();
                             $break = false;
                             $layout = get_row_layout();
                             
-                            $title = get_sub_field('title');
-                            $san_title = ($title) ? sanitize_title($title) : 'content-part-'.$index;
+                            $wp_config['t_vars'] = '';
+                            
+                            $wp_config['t_vars']['title'] = get_sub_field('title');
+                            $wp_config['t_vars']['san_title'] = ($title) ? sanitize_title($title) : 'content-part-'.$index;
+                            
+                            
                             $opts = get_sub_field('options');
                             if(is_array($opts)) {
-                                $opts = array_shift($opts);
+                                $wp_config['t_vars']['opts'] = array_shift($opts);
                             }
+                            
+                            $templates = array(
+                                'userdata/templates/'.$layout.'-'.$san_title.'.php',
+                                'templates/'.$layout.'-'.$san_title.'.php',
+                                'userdata/templates/'.$layout.'.php',
+                                'templates/'.$layout.'.php'
+                            );
                             
                             switch ($layout):
                                 case 'text_block':
-                                    $content = get_sub_field('content');
-                                    $height = get_sub_field('height') ? 'height:'.get_sub_field('height') . 'px' : '';
-                                ?>
-                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part text-block <?php echo $san_title ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?> <?php echo $opts['css_class'] ?>" style="<?php echo $height; ?>">
-                                    <div class="layout-wrapper">
-                                    <?php if($opts['is_title']): ?>
-                                    <header>
-                                        <h3 class="content-part-title"><?php echo $title ?></h3>
-                                    </header>
-                                    <?php endif; ?>
-                                    <?php if($content): ?>
-                                    <div class="content-part-text">
-                                        <?php echo $content ?>
-                                    </div>
-                                    <?php endif; ?>
-                                    </div>
-                                </section>
-                                <?php
+                                    $wp_config['t_vars']['content'] = get_sub_field('content');
+                                    $wp_config['t_vars']['classes'][] = $wp_config['t_vars']['opts']['css_class'];
+                                    $wp_config['t_vars']['classes'][] = $wp_config['t_vars']['san_title'];
+                                    if($wp_config['t_vars']['opts']['anchor'])
+                                        $wp_config['t_vars']['classes'][] = 'waypoint-block';
+                                    
+                                    if($wp_config['t_vars']['opts']['height'])
+                                        $wp_config['t_vars']['classes'][] = 'slide';
                                 break;
                                 case 'image_block':
-                                    $image = get_sub_field('image');
-                                    $height = get_sub_field('height');
-                                    $window_effect = get_sub_field('window_effect');
-                                    $overlay = get_sub_field('overlay');
-                                ?>
-                                <section class="content-part fullwidth-image <?php if($overlay): ?>absolute<?php endif; ?>" style="background-image: url('<?php echo $image['url'] ?>'); height:<?php echo $height ?>px; background-size: cover; <?php if($window_effect): ?>background-attachment: fixed<?php endif; ?>;"></section>
-                                <?php
+                                    $wp_config['t_vars']['image'] = get_sub_field('image');
                                 break;
                                 case 'entries_block':
                                     $cpt_opts = array_shift(get_sub_field('post_type_options'));
-                                    $post_type = $cpt_opts['post_type'];
-                                    $pre = 'pt_'.$post_type.'_'.$index;
-                                    $posts_count = $cpt_opts['posts_count'];
+                                    $wp_config['t_vars']['post_type'] = $cpt_opts['post_type'];
+                                    $wp_config['t_vars']['pre'] = 'pt_'.$wp_config['t_vars']['post_type'].'_'.$index;
+                                    $wp_config['t_vars']['posts_count'] = $cpt_opts['posts_count'];
                                     
                                     $use_opt = get_sub_field('individual_settings');
                                     
                                     $layout_opts = array_shift(get_sub_field('layout_options'));
-                                    $layout_type = ($use_opt) ? $layout_opts['layout_type'] : $ss_settings[$post_type.'_layout_type'];
-                                    $column_padding = ($use_opt) ? $layout_opts['column_padding'] : $ss_settings[$post_type.'_column_padding'];
+                                    $wp_config['t_vars']['layout_type'] = ($use_opt) ? $layout_opts['layout_type'] : $ss_settings[$wp_config['t_vars']['post_type'].'_layout_type'];
+                                    $column_padding = ($use_opt) ? $layout_opts['column_padding'] : $ss_settings[$wp_config['t_vars']['post_type'].'_column_padding'];
                                     
                                     
                                     $columns_num = array_shift(get_sub_field('columns_num'));
                                     foreach ($media_sizes as $size => $value) {
-                                        $col_num[$size] = ($use_opt) ? $columns_num[$size] : $ss_settings[$post_type.'_columns_num_'.$size];
+                                        $col_num[$size] = ($use_opt) ? $columns_num[$size] : $ss_settings[$wp_config['t_vars']['post_type'].'_columns_num_'.$size];
                                     }
                                     
-                                    if ($layout_type==1) $type = 'masonry';
-                                    elseif ($layout_type==2) $type = 'fitRows';
+                                    if ($wp_config['t_vars']['layout_type']==1) $wp_config['t_vars']['type'] = 'masonry';
+                                    elseif ($wp_config['t_vars']['layout_type']==2) $wp_config['t_vars']['type'] = 'fitRows';
                                     
-                                    if ($layout_type):
+                                    if ($wp_config['t_vars']['layout_type']):
                                         $custom_css = '';
                                     
-                                        $column_padding /= 2;
+                                        $wp_config['t_vars']['column_padding'] /= 2;
 
 
-                                        $custom_css .= "#${pre}.entries-wrapper { margin: 0 -{$column_padding}px; }";
-                                        $custom_css .= "#${pre}.entries-wrapper article { padding: 0 {$column_padding}px; box-sizing:border-box }";
+                                        $custom_css .= "#".$wp_config['t_vars']['pre'].".entries-wrapper { margin: 0 -".$column_padding."px; }";
+                                        $custom_css .= "#".$wp_config['t_vars']['pre'].".entries-wrapper article { padding: 0 ".$column_padding."px; box-sizing:border-box }";
 
                                         foreach ($media_sizes as $size => $value) {
                                             $width = 100 / $col_num[$size];
-                                            $custom_css .= "\n @media ({$media_sizes[$size]}) { #{$pre}.entries-wrapper article { width: {$width}% }  }";
+                                            $custom_css .= "\n @media ({$media_sizes[$size]}) { #".$wp_config['t_vars']['pre'].".entries-wrapper article { width: ".$width."% }  }";
                                         }
 
                                         echo '<style type="text/css">' . $custom_css . '</style>';
                                     endif;
-
-                                ?>
-                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part entries-block post-type-<?php echo $post_type ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>">
-                                    <?php if($opts['is_title']): ?>
-                                    <header>
-                                        <h3 class="content-part-title"><?php echo $title ?></h3>
-                                    </header>
-                                    <?php endif; ?>
-                                    <div id="<?php echo $pre ?>" class="entries-wrapper post-type-<?php echo $post_type ?> <?php if($layout_type): ?>wrapper-isotope<?php endif; ?>" layout-type="<?php echo $type ?>">
-                                    <?php 
-                                        // WP_Query arguments
-                                        $args = array (
-                                                'post_type'              => $post_type,
-                                                'posts_per_page'         => $posts_count,
-                                        );
-
-                                        // The Query
-                                        $query = new WP_Query( $args );
-
-                                        // The Loop
-                                        if ( $query->have_posts() ):
-                                            while ( $query->have_posts() ):
-                                                $query->the_post();
-                                                get_template_part('templates/loop',$post_type);
-                                            endwhile;
-                                        endif;
-                                    ?>
-                                    </div>
-                                    <?php if($opts['is_archive_link']): ?>
-                                        <div class="content-part-link"><a href="<?php echo get_post_type_archive_link( $post_type ); ?>" rel="bookmark">See all</a></div>
-                                    <?php endif; ?>
-                                </section>
-                                <?php
-                                    // Restore original Post Data
-                                    wp_reset_postdata();
                                 break;
-                                case 'tabs':
+                                case 'features_block':
+                                    $columns_num = array_shift(get_sub_field('columns_num'));
+                                    $wp_config['t_vars']['items'] = get_sub_field('items');
+                                    $wp_config['t_vars']['numbered'] = $opts['numbered'];
+                                    $column_padding = $opts['column_padding'];
+                                    
+                                    $custom_css = '';
+                                    
+                                    $custom_css .= ".features-wrapper .feature-item { padding: 0 {$column_padding}px; box-sizing:border-box }";
+                                    
+                                    foreach ($media_sizes as $size => $value) {
+                                        $width = 100 / $columns_num[$size];
+                                        $custom_css .= "\n @media ({$media_sizes[$size]}) { .features-wrapper .feature-item { width: {$width}% }  }";
+                                        
+                                    }
+                                    
+                                    
+                                ?>
+                                <style type="text/css"><?php echo $custom_css ?></style>
+                                <?php
+                                break;
+                                /*case 'tabs':
                                     $items = get_sub_field('items');
                                 ?>
                                 <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part entries-block post-type-<?php echo $post_type ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>">
@@ -203,50 +184,13 @@ while ( have_posts() ) : the_post();
                                 <?php
                                     endif;
                                     wp_reset_postdata();                                
-                                break;
-                                case 'features_block':
-                                    $columns_num = array_shift(get_sub_field('columns_num'));
-                                    $items = get_sub_field('items');
-                                    $numbered = $opts['numbered'];
-                                    $column_padding = $opts['column_padding'];
-                                    
-                                    $custom_css = '';
-                                    
-                                    $custom_css .= ".features-wrapper .feature-item { padding: 0 {$column_padding}px; box-sizing:border-box }";
-                                    
-                                    foreach ($media_sizes as $size => $value) {
-                                        $width = 100 / $columns_num[$size];
-                                        $custom_css .= "\n @media ({$media_sizes[$size]}) { .features-wrapper .feature-item { width: {$width}% }  }";
-                                        
-                                    }
-                                    
-                                    
-                                ?>
-                                <style type="text/css"><?php echo $custom_css ?></style>
-                                <section <?php if($opts['anchor']): ?>id="<?php echo $san_title ?>"<?php endif; ?> class="content-part entries-block post-type-<?php echo $post_type ?> <?php if($opts['anchor']): ?>waypoint-block<?php endif; ?>">
-                                    <?php if($opts['is_title']): ?>
-                                    <header>
-                                        <h3 class="content-part-title"><?php echo $title ?></h3>
-                                    </header>
-                                    <?php endif; ?>
-                                    <div class="features-wrapper wrapper-isotope" layout-type="fitRows">
-                                        <?php foreach ($items as $i => $item): ?>
-                                        <article class="feature-item">
-                                            <?php if($numbered): ?><div class="item-position"><?php echo $i+1 ?></div><?php endif; ?>
-                                            <?php if($item['image']): ?><div class="item-image"><img src="<?php echo $item['image']['url'] ?>"></div><?php endif; ?>    
-                                            <?php if($item['title']): ?><h3 class="item-title"><?php echo $item['title'] ?></h3><?php endif; ?>    
-                                            <?php if($item['subtitle']): ?><h4 class="item-subtitle"><?php echo $item['subtitle'] ?></h4><?php endif; ?>    
-                                            <?php if($item['description']): ?><div class="item-description"><?php echo $item['description'] ?></div><?php endif; ?>    
-                                        </article>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </section>
-                                <?php
-                                break;
+                                break;  */                              
                                 case 'separator':
                                     $break = true;
                                 break;
                             endswitch;
+
+                            $template = locate_template($templates,true,false);
 
                             $layout_index++;
                             if($break) break;

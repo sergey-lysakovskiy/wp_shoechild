@@ -28,7 +28,7 @@ function background_parallax_body_class($classes) {
 add_action('wp_enqueue_scripts', 'background_parallax_script');
 
 function background_parallax_script() {
-    wp_register_script('parallax',get_stylesheet_directory_uri() . '/assets/js/parallax.js',array('jquery'));
-    wp_enqueue_script('parallax');
+    //wp_register_script('parallax',get_stylesheet_directory_uri() . '/assets/js/parallax.js',array('jquery'));
+    //wp_enqueue_script('parallax');
 }
 

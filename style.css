@@ -96,6 +96,20 @@ li.parent .nav-sublist {
     z-index: 2;
 }
 
+.content-part > .max-width-wrapper > header {
+    overflow: auto;
+}
+
+.content-part > .max-width-wrapper.vertical-middle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    resize: vertical;
+    overflow: auto;
+    left:0;
+    right:0;
+}
+
 .cell {
     display: table-cell;
     vertical-align: middle;

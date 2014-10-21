@@ -5,6 +5,7 @@ require('includes/shoestrap-overrides.php');
 require('includes/parallax.php');
 require('includes/shoestrap-options-navbar.php');
 require('includes/shoestrap-options-header.php');
+require('includes/shoestrap-options-layout.php');
 require('includes/shoestrap-options-footer.php');
 require('includes/menu-anchor-links.php');
 require('includes/cpt-override.php');
@@ -22,12 +23,39 @@ function shoestrap_styles() {
     wp_register_script('jquery.visible',get_stylesheet_directory_uri() . '/assets/js/jquery.visible.min.js',array('jquery'));
     wp_enqueue_script('jquery.visible');
 
+    /* anchor waypoints */
     wp_register_script('waypoints',get_stylesheet_directory_uri() . '/assets/js/waypoints.min.js',array('jquery'));
     wp_enqueue_script('waypoints');
     
+    /* mansory style */
     wp_register_script('isotope',get_stylesheet_directory_uri() . '/assets/js/isotope.pkgd.min.js');
     wp_enqueue_script('isotope');
 
+    /* mousewheel library */
+    wp_register_script('jquery-mousewheel',get_stylesheet_directory_uri() . '/assets/js/jquery.mousewheel.min.js',array('jquery'));
+    wp_enqueue_script('jquery-mousewheel');
+
+    /* smooth scroll */
+    wp_register_script('smooth-scroll',get_stylesheet_directory_uri() . '/assets/js/jquery.simplr.smoothscroll.js',array('jquery-mousewheel'));
+    wp_enqueue_script('smooth-scroll');
+    
+    wp_register_script('jquery-scrollto',get_stylesheet_directory_uri() . '/assets/js/jquery.scrollTo-1.4.3.1.min.js',array('jquery'));
+    wp_enqueue_script('jquery-scrollto');
+
+    wp_register_script('jquery-easing',get_stylesheet_directory_uri() . '/assets/js/jquery.easing.1.3.js',array('jquery'));
+    wp_enqueue_script('jquery-easing');
+
+    wp_register_script('jquery-parallax',get_stylesheet_directory_uri() . '/assets/js/jquery.parallax-1.1.js',array('jquery'));
+    wp_enqueue_script('jquery-parallax');
+
+    wp_register_script('jquery-scrollorama',get_stylesheet_directory_uri() . '/assets/js/jquery.scrollorama.js',array('jquery'));
+    wp_enqueue_script('jquery-scrollorama');
+
+    wp_register_script('jquery-scrolldeck',get_stylesheet_directory_uri() . '/assets/js/jquery.scrolldeck.js',array('jquery','jquery-easing','jquery-scrollorama'));
+    wp_enqueue_script('jquery-scrolldeck');
+    
+
+    
     wp_register_script('cpt-masonry-enable',get_stylesheet_directory_uri() . '/assets/js/cpt-masonry-enable.js',array('jquery','isotope'));
     wp_enqueue_script('cpt-masonry-enable');
 
@@ -40,7 +68,7 @@ function shoestrap_styles() {
     wp_register_script('wc-quantity-loop',get_stylesheet_directory_uri() . '/assets/js/wc-quantity-loop.js',array('jquery'));
     wp_enqueue_script('wc-quantity-loop');
 
-    wp_register_script('theme',get_stylesheet_directory_uri() . '/assets/js/theme.js',array('jquery','isotope'));
+    wp_register_script('theme',get_stylesheet_directory_uri() . '/assets/js/theme.js',array('jquery','isotope','jquery-parallax'));
     wp_enqueue_script('theme');
 
     wp_enqueue_style( 'theme', get_stylesheet_uri(), false, null );
