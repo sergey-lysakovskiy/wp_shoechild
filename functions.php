@@ -39,7 +39,7 @@ function shoestrap_styles() {
     wp_register_script('smooth-scroll',get_stylesheet_directory_uri() . '/assets/js/jquery.simplr.smoothscroll.js',array('jquery-mousewheel'));
     wp_enqueue_script('smooth-scroll');
     
-    wp_register_script('jquery-scrollto',get_stylesheet_directory_uri() . '/assets/js/jquery.scrollTo-1.4.3.1.min.js',array('jquery'));
+    /*wp_register_script('jquery-scrollto',get_stylesheet_directory_uri() . '/assets/js/jquery.scrollTo-1.4.3.1.min.js',array('jquery'));
     wp_enqueue_script('jquery-scrollto');
 
     wp_register_script('jquery-easing',get_stylesheet_directory_uri() . '/assets/js/jquery.easing.1.3.js',array('jquery'));
@@ -52,7 +52,7 @@ function shoestrap_styles() {
     wp_enqueue_script('jquery-scrollorama');
 
     wp_register_script('jquery-scrolldeck',get_stylesheet_directory_uri() . '/assets/js/jquery.scrolldeck.js',array('jquery','jquery-easing','jquery-scrollorama'));
-    wp_enqueue_script('jquery-scrolldeck');
+    wp_enqueue_script('jquery-scrolldeck');*/
     
 
     
